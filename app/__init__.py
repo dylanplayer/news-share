@@ -1,6 +1,7 @@
 from flask import Flask, redirect
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_assets import Environment, Bundle
 from dotenv import load_dotenv
 from app.config import Config
 import os
@@ -8,10 +9,20 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
+
 app.config.from_object(Config)
 app.secret_key = os.environ.get('SECRET')
 
 db = SQLAlchemy(app)
+
+assets = Environment(app)
+assets.url = app.static_url_path
+
+scss = Bundle("assets/main.scss", filters="libsass", output="css/scss-generated.css")
+assets.register("scss_all", scss)
+
+js = Bundle("assets/node_modules/jquery/dist/jquery.min.js", "assets/node_modules/@popperjs/core/dist/umd/popper.min.js", "assets/node_modules/bootstrap/dist/js/bootstrap.min.js", filters="jsmin", output="js/generated.js")
+assets.register("js_all", js)
 
 from app.controllers.users import users
 from app.controllers.main import main
