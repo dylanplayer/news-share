@@ -1,0 +1,67 @@
+{% extends 'layouts/base.html' %}
+{% include 'partials/navbar.html' %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center mt-3" style="height: 100vh;">
+  <div class="card bg-white d-flex flex-column align-items-center" style="width: 100%; max-width: 800px; border-radius: 10px; padding: 1rem;">
+    <h1 class="align-self-start h3">New Story</h1>
+    <form action="/new" method="POST" class="w-100">
+      <input required type="text" name="url" id="urlInput" placeholder="story url" class="w-100 form-control-lg h5 p-2 mt-3" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52;">
+      <input required maxlength="255" type="text" name="title" placeholder="title" id="titleInput" class="w-100 form-control-lg h5 p-2" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52; display: none;">
+      <textarea name="text" placeholder="summary" id="summaryInput" class="w-100 form-control-lg h5 p-2" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52; display: none;"></textarea>
+      <button type="submit" class="btn btn-primary w-100 fw-bold text-white fs-5 d-flex flex-column align-items-center" disabled style="border-radius: 10px;" id="submitButton">SUBMIT STORY</button>
+    </form>
+  </div>
+</div>
+<style>
+  .loader {
+    border: .4rem solid #f3f3f3; /* Light grey */
+    border-top: .4rem solid #0080FB; /* Blue */
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    animation: spin .5s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+<script>
+  const urlInput = document.getElementById("urlInput");
+  const submitButton = document.getElementById("submitButton");
+  const loader = document.createElement("div");
+  loader.className = "loader";
+  urlInput.addEventListener("change", (e) => {
+    submitButton.innerHTML = "";
+    submitButton.appendChild(loader);
+    fetch("/api/meta-data", { 
+      method: "POST",
+      body: JSON.stringify({
+          url: urlInput.value,
+        }
+      ),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(res => res.json()).then(
+      (data) => {
+        document.getElementById('titleInput').value = data.title;
+        document.getElementById('titleInput').style.display = 'block';
+        document.getElementById('summaryInput').style.display = 'block';
+        submitButton.innerHTML = "SUBMIT STORY";
+        submitButton.removeAttribute('disabled');
+      }
+    ).catch(
+      (err) => {
+        console.log(err);
+        document.getElementById('titleInput').style.display = 'block';
+        document.getElementById('summaryInput').style.display = 'block';
+        submitButton.innerHTML = "SUBMIT STORY";
+        submitButton.removeAttribute('disabled');
+      }
+    )
+  });
+</script>
+{% endblock %}

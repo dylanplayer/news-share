@@ -60,6 +60,7 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
 
+    flash('Account created, please login.', category='success')
     return(redirect(url_for('users.login')))
 
 @users.route('/logout', methods=['GET'])

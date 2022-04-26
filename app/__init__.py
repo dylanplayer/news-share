@@ -21,14 +21,18 @@ assets.url = app.static_url_path
 scss = Bundle("assets/main.scss", filters="libsass", output="css/scss-generated.css")
 assets.register("scss_all", scss)
 
-js = Bundle("assets/node_modules/jquery/dist/jquery.min.js", "assets/node_modules/@popperjs/core/dist/umd/popper.min.js", "assets/node_modules/bootstrap/dist/js/bootstrap.min.js", filters="jsmin", output="js/generated.js")
+js = Bundle("assets/node_modules/jquery/dist/jquery.min.js", "assets/node_modules/@popperjs/core/dist/umd/popper.min.js", "assets/node_modules/bootstrap/dist/js/bootstrap.min.js", "assets/node_modules/bootstrap/js/dist/alert.js", filters="jsmin", output="js/generated.js")
 assets.register("js_all", js)
 
 from app.controllers.users import users
 from app.controllers.main import main
+from app.controllers.stories import stories
+from app.controllers.api import api
 
 app.register_blueprint(users)
 app.register_blueprint(main)
+app.register_blueprint(stories)
+app.register_blueprint(api)
 
 login_manager = LoginManager()
 login_manager.login_view = 'users.login'
