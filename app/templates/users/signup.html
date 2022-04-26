@@ -1,4 +1,67 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
-  <h1>Signup</h1>
+  <div class="container d-flex flex-column align-items-center justify-content-center" style="height: 100vh;">
+    <div class="card bg-white d-flex flex-column align-items-center" style="width: 100%; max-width: 500px; border-radius: 10px;">
+      <img src="static/img/logo.png" width="250px" class="mt-3">
+      <form class="w-75 mt-5 text-center" action="/signup" method="POST">
+        <div id="errors"></div>
+        <input required type="email" value="{{ email }}" name="email" placeholder="email" class="w-100 form-control-lg h5 p-2" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52;">
+        <input required type="password" name="password" id="passwordInput" placeholder="password" class="w-100 form-control-lg h5 p-2" minlength="8" maxlength="255" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,}$" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52;">
+        <input required type="password" minlength="8" maxlength="255" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,}$" name="confirm_password" id="confirmPasswordInput" placeholder="confirm password" class="w-100 form-control-lg h5 p-2" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52;">
+        <input required type="text" name="given_name" placeholder="first name" class="w-100 form-control-lg h5 p-2" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52;">
+        <input required type="text" name="family_name" placeholder="last name" class="w-100 form-control-lg h5 p-2" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52;">
+        <input required type="text" name="position" placeholder="job title" class="w-100 form-control-lg h5 p-2" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52;">
+        <input required type="text" name="company" placeholder="company" class="w-100 form-control-lg h5 p-2" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52;">
+        <textarea name="bio" placeholder="bio" class="w-100 form-control-lg h5 p-2 mb-4" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52;"></textarea>
+        <button type="submit" class="btn btn-primary w-100 fw-bold text-white fs-5" style="border-radius: 10px; display: none;" id="submitButton">REGISTER</button>
+      </form>
+      <p class="mt-2 mb-3">Already have an account? <a href="/login">Login</a></p>
+    </div>
+  </div>
+  <script>
+    const passwordInput = document.getElementById("passwordInput");
+    const confirmPasswordInput = document.getElementById("confirmPasswordInput");
+    const passwordDoesNotMatch = document.createElement("p");
+    const submitButton = document.getElementById("submitButton");
+    const passwordRequirements = document.createElement("p");
+
+    passwordDoesNotMatch.className = "text-danger";
+    passwordDoesNotMatch.innerHTML = "Passwords do not match.";
+    passwordRequirements.className = "text-danger";
+    passwordRequirements.innerHTML = "Password must contain 8 characters, 1 number, & 1 capital letter.";
+    
+    let passwordMeetsRequirements = false;
+    let passwordsMatch = false;
+
+    const checkPasswords = () => {
+      if (confirmPasswordInput.value != passwordInput.value) {
+        document.getElementById('errors').appendChild(passwordDoesNotMatch);
+        passwordsMatch = false;
+      } else {
+        try{
+          document.getElementById('errors').removeChild(passwordDoesNotMatch);
+        } catch (e) {}
+        passwordsMatch = true;
+      }
+
+      if (!(passwordInput.value.match( /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,}$/ ))) {
+        document.getElementById('errors').appendChild(passwordRequirements);
+        passwordMeetsRequirements = false;
+      } else {
+        try{
+          document.getElementById('errors').removeChild(passwordRequirements);
+        } catch (e) {}
+        passwordMeetsRequirements = true;
+      }
+
+      if (passwordMeetsRequirements && passwordsMatch) {
+        submitButton.style.display = "block";
+      } else {
+        submitButton.style.display = "none";
+      }
+    }
+
+    passwordInput.addEventListener('change', checkPasswords);
+    confirmPasswordInput.addEventListener('input', checkPasswords);
+  </script>
 {% endblock %}
