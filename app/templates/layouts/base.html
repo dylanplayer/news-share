@@ -6,15 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News Share</title>
 
-    {% assets "js_all" %}
-        <script type="text/javascript" defer src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-
     {% assets "scss_all" %}
         <link rel=stylesheet type=text/css href="{{ ASSET_URL }}">
     {% endassets %}
   </head>
-  <body>
+  <body style="min-height: 100vh;">
     {% block content %}{% endblock %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="fixed-bottom">
+          {% for category, message in messages %}
+            <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    
+    {% assets "js_all" %}
+      <script type="text/javascript" defer src="{{ ASSET_URL }}"></script>
+    {% endassets %}
   </body>
 </html>
