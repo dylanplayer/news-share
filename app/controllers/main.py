@@ -8,5 +8,5 @@ main = Blueprint('main', __name__)
 @main.route('/', methods=['GET'])
 @login_required
 def index():
-  stories = Story.query.all()
+  stories = sorted(Story.query.all(), key=lambda x: len(x.ratings), reverse=True)
   return(render_template('stories/index.html', current_user=current_user, stories=stories))
