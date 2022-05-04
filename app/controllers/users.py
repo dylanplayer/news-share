@@ -1,7 +1,8 @@
 from flask import Blueprint, redirect, render_template, abort, request, url_for, flash
-from flask_login import login_required, login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models import User
+from operator import attrgetter
 from app import app, db
 
 users = Blueprint('users', __name__)
@@ -63,6 +64,28 @@ def signup():
     flash('Account created, please login.', category='success')
     return(redirect(url_for('users.login')))
 
+@users.route('/profile/<id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit(id):
+  user = User.query.get(id)
+  if current_user.id == user.id:
+    if request.method == 'GET':
+      return(render_template('users/edit.html', user=user))
+    else:
+      user.given_name = request.form.get('given_name')
+      user.family_name = request.form.get('family_name')
+      user.bio = request.form.get('bio')
+      user.position = request.form.get('position')
+      user.company = request.form.get('company')
+
+      db.session.add(user)
+      db.session.commit()
+      
+      flash('Account Updated', category='success')
+      return(redirect(url_for('users.show', id=id)))
+  else:
+    return(redirect(url_for('main.index')))
+
 @users.route('/logout', methods=['GET'])
 @login_required
 def logout():
@@ -71,5 +94,7 @@ def logout():
 
 @users.route('/profile/<id>', methods=['GET'])
 @login_required
-def show():
-  render_template('users/show.html')
+def show(id):
+  user = User.query.get(id)
+  stories = sorted(user.stories, key=lambda x: len(x.ratings), reverse=True)
+  return(render_template('users/show.html', user=user, stories=stories))

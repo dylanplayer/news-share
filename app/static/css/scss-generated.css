@@ -5819,3 +5819,6 @@ progress {
     display: inline-flex !important; }
   .d-print-none {
     display: none !important; } }
+
+body, html {
+  width: 100vw; }
