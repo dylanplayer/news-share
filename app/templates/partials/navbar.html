@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white justify-content-between ps-3 pe-3">
-  <a class="navbar-brand pl-5" href="/"><img src="/static/img/logo.png" height="50px" alt="Evently Logo"></a>
+  <a class="navbar-brand pl-5" href="{{ url_for('main.index') }}"><img src="/static/img/logo.png" height="50px" alt="Evently Logo"></a>
   <div class="d-flex flex-row align-items-center gap-2">
     <a href="/profile"><img src="https://robohash.org/{{ current_user.email }}" height="45px" class="ms-3" style="border-radius: 50%; border: 3px solid #23C9A9;"></a>
-    <a class="btn btn-primary text-white fs-5" href="/new">+</a>
+    <a class="btn btn-primary text-white fs-5" href="{{ url_for('stories.new') }}">+</a>
   </div>
 </nav>
