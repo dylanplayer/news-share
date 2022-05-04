@@ -68,3 +68,8 @@ def signup():
 def logout():
   logout_user()
   return(redirect('/'))
+
+@users.route('/profile/<id>', methods=['GET'])
+@login_required
+def show():
+  render_template('users/show.html')

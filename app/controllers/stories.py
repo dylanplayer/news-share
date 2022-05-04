@@ -8,7 +8,7 @@ stories = Blueprint('stories', __name__)
 
 @stories.route('/new', methods=['GET', 'POST'])
 @login_required
-def new_story():
+def new():
   if (request.method == 'GET'):
     return(render_template('stories/new.html', current_user=current_user))
   else:
@@ -26,7 +26,7 @@ def new_story():
 
 @stories.route('/stories/<id>', methods=['GET', 'POST'])
 @login_required
-def story(id):
+def show(id):
   story = Story.query.filter_by(id=id).first()
   return(render_template('stories/show.html', story=story, current_user=current_user))
 
