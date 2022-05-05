@@ -27,11 +27,13 @@ assets.register("js_all", js)
 from app.controllers.users import users
 from app.controllers.main import main
 from app.controllers.stories import stories
+from app.controllers.comments import comments
 from app.controllers.api import api
 
 app.register_blueprint(users)
 app.register_blueprint(main)
 app.register_blueprint(stories)
+app.register_blueprint(comments)
 app.register_blueprint(api)
 
 login_manager = LoginManager()

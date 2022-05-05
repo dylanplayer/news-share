@@ -3,7 +3,7 @@
 
 {% block content %}
   <div class="container d-flex flex-column align-items-center mt-3 gap-4" style="min-height: 100vh;">
-    <div class="card bg-white d-flex flex-row align-items-start justify-content-between" style="width: 100%; max-width: 800px; border-radius: 10px; padding: 1rem;">
+    <div class="card bg-white d-flex flex-row align-items-center justify-content-between" style="width: 100%; max-width: 800px; border-radius: 10px; padding: 1rem;">
       <div class="d-flex flex-column align-items-start">
         <a href="{{ url_for('stories.show', id=story.id) }}" class="text-decoration-none link-dark"><h1 class="h4 align-self-start">{{ story.title }}</h1></a>
         <p class="mb-0 text-align-left align-self-start">{{ story.text }}</p>
@@ -27,8 +27,21 @@
         <p class="fw-bold mt-0">{{ story.ratings | length }}</p>
       </div>
     </div>
-    <div class="card bg-white d-flex flex-row align-items-start justify-content-between" style="width: 100%; max-width: 800px; border-radius: 10px; padding: 1rem;">
+    <div class="card bg-white d-flex flex-column align-items-start" style="width: 100%; max-width: 800px; border-radius: 10px; padding: 1rem;">
       <h1 class="h4">Comments</h1>
+      <form action="{{ url_for('comments.new', id=story.id ) }}" class="w-100 d-flex flex-column align-items-center" method="POST">
+        <textarea name="text" placeholder="Enter your comment..." class="w-100 form-control-lg h5 p-2" style="border: 3px solid #684B52; border-radius: 10px; color: #684B52;"></textarea>
+        <button type="submit" class="btn btn-primary fw-bold text-white align-self-end">COMMENT</button>
+      </form>
+      {% for comment in story.comments %}
+        <div class="d-flex flex-column align-items-start justify-content-start w-100 pt-3" style="border-top: 1px solid #1212121F;">
+          <div class="d-flex flex-row align-items-center h-100">
+            <a href="{{ url_for('users.show', id=comment.user.id) }}"><img src="https://robohash.org/{{ comment.user.email }}" height="35px" style="border-radius: 50%; border: 3px solid #23C9A9;"></a>
+            <a href="{{ url_for('users.show', id=comment.user.id) }}" class="text-decoration-none link-dark fw-bold mb-0" style="margin-left: 10px;">{{ comment.user.given_name }}{{ comment.user.family_name }}</a>
+          </div>
+          <p style="margin-left: 45px;">{{ comment.text }}</p>
+        </div>
+      {% endfor %}
     </div>
   </div>
 {% endblock %}
