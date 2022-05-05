@@ -5,6 +5,7 @@
 instance/*
 !instance/.gitignore
 .webassets-cache
+app/database.db
 
 ### Flask.Python Stack ###
 # Byte-compiled / optimized / DLL files
@@ -19,7 +20,6 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
